@@ -23,24 +23,43 @@ class ProductController extends Controller
 
     public function searchProduct(Request $request)
     {
-        // $data = $request->all();
-        // return $products = Product::where(function ($q) use ($data) {
-        //     if (!empty($data['q']) && $data['q'] != '' && $data['q'] != 'undefined') {
-        //         $q->where(function ($q) use ($data) {
-        //             $q->where('name', 'like', '%' . $data['q'] . '%');
-        //             // $q->orWhere('description', 'like', '%' . $data['q'] . '%');
-        //         });
-        //     }
-        // })->get();
-        $query = Product::query();
+        $data = $request->all();
+        // $data['search'];
+        $products = Product::where(function ($q) use ($data) {
+            if (!empty($data['search']) && $data['search'] != '' && $data['search'] != 'undefined') {
+                $q->where(function ($q) use ($data) {
+                    $q->where('name', 'like', '%' . $data['search'] . '%');
+                    $q->orWhere('description', 'like', '%' . $data['search'] . '%');
+                });
+            }
+        })->get();
 
-        if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-            $query->orWhere('description', 'like', '%' . $request->search . '%');
+        return view('product.view', [
+            'products' => $products,
+        ]);
+    }
+    public function dy_searchProduct(Request $request)
+    {
+        $data = $request->all();
+        // $data['search'];
+        $products = Product::where(function ($q) use ($data) {
+            if (!empty($data['search']) && $data['search'] != '' && $data['search'] != 'undefined') {
+                $q->where(function ($q) use ($data) {
+                    $q->where('name', 'like', '%' . $data['search'] . '%');
+                    $q->orWhere('description', 'like', '%' . $data['search'] . '%');
+                });
+            }
+        })->get();
+        $html = '';
+        foreach ($products as $product) {
+            $html .= '
+           <tr> <td class="border px-4 py-2">'.$product->name.'</td>'.
+            '<td class="border px-4 py-2">'.$product->description .'</td>'.
+            '<td class="border px-4 py-2">৳'.$product->price. '</td>'.
+            '</tr>';
         }
+        echo $html;
 
-        $products = $query->get();
-
-        return view('product.view', compact('products'));
+        // return response()->json(['products' => $html]);
     }
 }

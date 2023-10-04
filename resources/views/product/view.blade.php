@@ -13,10 +13,10 @@
                         style="width: 30%; margin: auto;">
                         <div class="flex items-center justify-between space-x-3">
                             <label for="search" class="text-gray-700">Search:</label>
-                            <input type="text" name="search" id="search" data-route=""
-                                value="{{ request('search') }}"
+                            <input type="text" name="search" id="search"
+                                data-route="{{ route('products.searchProduct') }}" value="{{ request('search') }}"
                                 class="border rounded py-2 px-3 focus:outline-none focus:ring focus:border-blue-300">
-                            <x-primary-button>
+                            <x-primary-button id="filterButton">
                                 {{ __('Filter') }}
                             </x-primary-button>
                         </div>
@@ -30,12 +30,45 @@
         <script type="module">
             $(document).ready(function() {
                 // Function to fetch and display data
-                function fetchData(searchTerm, route) {
+
+                // function fetchData(searchTerm, route) {
+                //     $.ajax({
+                //         type: "GET",
+                //         url: route,
+                //     });
+                // }
+                function filterProducts(searchTerm) {
                     $.ajax({
-                        type: "GET",
-                        url: route,
+                        type: "Get", // Replace with your server endpoint
+                        url: "/products/search/dynamic", // Replace with your server endpoint
+                        data: {
+                            search: searchTerm
+                        },
+                        success: function(response) {
+                            // Update the product list with the filtered data
+                            $('#products').html(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
                     });
                 }
+                // Handle input change event
+                $('#search').on('input', function() {
+                    var searchTerm = $(this).val();
+                    console.log(searchTerm);
+                    filterProducts(searchTerm);
+                });
+
+                // Handle button click event
+                $('#filterButton').on('click', function() {
+                    var searchTerm = $('#search').val();
+                    console.log(searchTerm);
+                    filterProducts(searchTerm);
+                });
+
+                // Initial filter (you can call this with an empty string to load all products)
+                // filterProducts('');
             });
         </script>
     </div>

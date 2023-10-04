@@ -1,4 +1,4 @@
-<table class="w-full table-auto">
+<table class="w-full  table-auto" id="">
     <thead>
         <tr>
             <th class="px-4 py-2">Name</th>
@@ -6,13 +6,13 @@
             <th class="px-4 py-2">Price</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="products">
         @foreach ($products as $product)
-        <tr>
-            <td class="border px-4 py-2">{{ $product->name }}</td>
-            <td class="border px-4 py-2">{{ $product->description }}</td>
-            <td class="border px-4 py-2">৳{{ number_format($product->price, 2) }}</td>
-        </tr>
+            <tr>
+                <td class="border px-4 py-2">{{ $product->name }}</td>
+                <td class="border px-4 py-2">{{ $product->description }}</td>
+                <td class="border px-4 py-2">৳{{ number_format($product->price, 2) }}</td>
+            </tr>
         @endforeach
     </tbody>
-</table> 
+</table>
